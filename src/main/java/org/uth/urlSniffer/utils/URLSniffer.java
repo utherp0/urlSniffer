@@ -56,16 +56,17 @@ public class URLSniffer
   
   private void pollResponseHeader( HttpURLConnection target, String[] subSearch )
   {
-    // Short circuit search
+    String server = target.getHeaderField("Server");
+    URLSniffer.log( "FOUND " + server + " " + target.getURL().toString());
+    
+    // Simple substring search search
     for( String subSearchComponent : subSearch )
-    {
-      String server = target.getHeaderField("Server");
-      
+    {      
       if( server != null )
-      {
+      {        
         if( server.indexOf(subSearchComponent) != -1 )
         {
-          URLSniffer.log( "MATCH " + subSearchComponent + " " + target.getURL().toString() );
+          URLSniffer.log( "  --> MATCH " + subSearchComponent + " " + target.getURL().toString() );
         }
       }
     }
