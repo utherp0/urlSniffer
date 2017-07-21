@@ -2,6 +2,8 @@ package org.uth.urlSniffer.utils;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * URLSniffer - takes a list of target URLs, establishes a connections, polls the
@@ -10,6 +12,9 @@ import java.net.URL;
  */
 public class URLSniffer 
 {
+  private List<String> _discoveredServers = null;
+  private List<String> _matches = null;
+  
   public static void main( String[] args )
   {
     if( args.length != 2 )
@@ -24,6 +29,10 @@ public class URLSniffer
   public URLSniffer( String urlWhiteList, String serverSubWhiteList )
   {
     URLSniffer.log( "Starting...");
+    
+    // Reset the caches
+    _discoveredServers = new ArrayList<String>();
+    _matches = new ArrayList<String>();
     
     // Extract the list of target URLs
     String[] targetURLs = urlWhiteList.split(",");
@@ -58,6 +67,7 @@ public class URLSniffer
   {
     String server = target.getHeaderField("Server");
     URLSniffer.log( "FOUND " + server + " " + target.getURL().toString());
+    _discoveredServers.add( server + " " + target.getURL().toString());
     
     // Simple substring search search
     for( String subSearchComponent : subSearch )
@@ -67,10 +77,15 @@ public class URLSniffer
         if( server.indexOf(subSearchComponent) != -1 )
         {
           URLSniffer.log( "  --> MATCH " + subSearchComponent + " " + target.getURL().toString() );
+          _matches.add( server + " " + subSearchComponent + " " + target.getURL().toString());
         }
       }
     }
   }
+  
+  // Cache Accessors
+  public List<String> getDiscoveredServers() { return _discoveredServers; }
+  public List<String> getMatches() { return _matches; }
   
   private static void log( String message )
   {
