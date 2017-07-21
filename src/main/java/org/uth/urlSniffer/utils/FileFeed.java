@@ -73,6 +73,7 @@ public class FileFeed
       bufferedWriter.write("Report created " + reportDate );
       bufferedWriter.newLine();
       bufferedWriter.write("Time to generate report " + elapsed + "ms." );
+      bufferedWriter.newLine();
       bufferedWriter.write("Report sought: " + serversToMatch );
       bufferedWriter.newLine();
       bufferedWriter.newLine();
